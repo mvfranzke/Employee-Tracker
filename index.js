@@ -83,8 +83,9 @@ function loadMainMenu() {
 
 //functions to be called from switch case based from users selection
 
+//list all content of table department
 function viewDepartments() {
-  db.findAllDepartments()
+  db.viewAllDepartments()
   .then(([rows]) => {
     let departments = rows;
     console.log("\n");
@@ -93,8 +94,16 @@ function viewDepartments() {
   .then(() => loadMainMenu());
 }
 
-
-function viewRoles() {}
+//list all content of table roles with department name
+function viewRoles() {
+  db.viewAllRoles()
+  .then(([rows]) => {
+    let roles = rows;
+    console.log("\n");
+    console.table(roles);
+  })
+  .then(()=> loadMainMenu());
+}
 
 
 function viewEmployees() {}
