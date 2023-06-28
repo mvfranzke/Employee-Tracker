@@ -9,6 +9,7 @@ function init() {
   loadMainMenu();
 }
 
+//list of main menu options available to user
 function loadMainMenu() {
   prompt([
     {
@@ -57,6 +58,7 @@ function loadMainMenu() {
   ]).then (res => {
     let menu = res.menu;
 
+//used switch case to call function based on users selection from main menu
     switch (menu) {
       case "VIEW_DEPARTMENTS":viewDepartments();
       break;
@@ -78,3 +80,15 @@ function loadMainMenu() {
     }
   }) 
 }
+
+//functions to be called from switch case based from users selection
+
+function viewDepartments() {}
+function viewRoles() {}
+function viewEmployees() {}
+function addDepartment() {}
+function addRole() {}
+function addEmployee() {}
+function updateEmployeeRole() {}
+function removeEmployee() {}
+function exit() {}
