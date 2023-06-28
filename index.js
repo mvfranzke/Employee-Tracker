@@ -105,8 +105,16 @@ function viewRoles() {
   .then(()=> loadMainMenu());
 }
 
-
-function viewEmployees() {}
+//list all content of employees table with salaries, department and managers column included
+function viewEmployees() {
+  db.viewAllEmployees()
+  .then(([rows]) => {
+    let employees = rows;
+    console.log("\n");
+    console.table(employees);
+  })
+  .then(() => loadMainMenu());
+}
 
 
 function addDepartment() {}
