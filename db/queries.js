@@ -46,7 +46,7 @@ class DB {
     return this.connection.promise().query("INSERT INTO role SET ?", role);
   }
 
-  // Create a new line of exployee and adds it on the employeee table
+  // Create a new line of exployee, with first name, last name, manager and role id and adds it on the employeee table
   createEmployee(employee) {
     return this.connection
       .promise()
