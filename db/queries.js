@@ -24,7 +24,7 @@ class DB {
       );
   }
 
-  //viewAllEmployees, table to reflect roles, salaries, dept and manager
+  //viewAllEmployees, table to reflect roles, salaries, dept and manager_id
 
   viewAllEmployees() {
     return this.connection
