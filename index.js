@@ -167,10 +167,10 @@ function addEmployee() {
   prompt([
     {
       name: "first_name",
-      message: "First Name: ",
+      message: "First Name: "
     },
     {
-      name: "last_name"
+      name: "last_name",
       message: "Last Name:"
     }
   ])
@@ -232,7 +232,45 @@ function addEmployee() {
 }
 
 
-function updateEmployeeRole() {}
+//updates the role of existing employee
+function updateEmployeeRole() {
+  db.viewAllEmployees()
+  .then (([rows])=>{
+    let employees = rows;
+    const employeeChoice = employees.map(({ id, first_name,last_name}) => ({ name: `${first_name} ${last_name}`, value: id }));
+
+
+    prompt([
+      {
+        type: "list",
+        name: "employeeID",
+        message: "Select employee to update: ",
+        choices: employeeChoice
+      }
+    ])
+        .then(res => {
+          let employeeID = res.employeeID;
+          db.viewAllRoles()
+            .then(([rows])=> {
+              let roles = rows;
+              const roleChoice = roles.map(({id, title}) => ({
+                name: title, value: id
+              }));
+
+              prompt([
+                {
+                  type: "list",
+                  name: "roleID",
+                  message: "Select new role title: ",
+                  choices: roleChoice
+                }
+              ])
+                .then(res => db.updateEmployeeRole(employeeID, res.roleID))
+                .then(() => console.log (`Role successfully updated.`))
+            });
+        });
+  })
+}
 
 
 function removeEmployee() {}
