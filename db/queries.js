@@ -1,22 +1,22 @@
+//import connection.js file
 const connection = require("./connection");
 
+//define class name DB
 class DB {
-  // Keeping a reference to the connection on the class in case we need it later
+  // set function constructor to take connection parameter and assign it to this.connection property
   constructor(connection) {
     this.connection = connection;
   }
 
-  // Find all departments
-  //viewAllDepartments
-  findAllDepartments() {
+  //viewAllDepartments without having the index to appear on the table
+  viewAllDepartments() {
     return this.connection
       .promise()
       .query("SELECT department.id, department.name FROM department;");
   }
 
-  // Find all roles, join with departments to display the department name
-  //viewAllRoles
-  findAllRoles() {
+  //viewAllRoles to display all role table content with department id
+  viewAllRoles() {
     return this.connection
       .promise()
       .query(
@@ -24,10 +24,9 @@ class DB {
       );
   }
 
-  // Find all employees, join with roles and departments to display their roles, salaries, departments, and managers
-  //viewAllEmployees
+  //viewAllEmployees, table to reflect roles, salaries, dept and manager
 
-  findAllEmployees() {
+  viewAllEmployees() {
     return this.connection
       .promise()
       .query(
@@ -35,28 +34,26 @@ class DB {
       );
   }
 
-  // Create a new department
-  //addDepartment
-  createDepartment(department) {
+  //addDepartment to create a new line of department in department table
+  addDepartment(department) {
     return this.connection
       .promise()
       .query("INSERT INTO department SET ?", department);
   }
 
-  // Create a new role
-  //addRole
-  createRole(role) {
+  //addRole insert a new line of role in role table
+  addRole(role) {
     return this.connection.promise().query("INSERT INTO role SET ?", role);
   }
 
-  // Create a new employee
+  // Create a new line of exployee and adds it on the employeee table
   createEmployee(employee) {
     return this.connection
       .promise()
       .query("INSERT INTO employee SET ?", employee);
   }
 
-  // Update the given employee's role
+  // update an existing employees role, passing employee id and role id parameter to update in employee table
   updateEmployeeRole(employeeId, roleId) {
     return this.connection
       .promise()
@@ -66,13 +63,13 @@ class DB {
       ]);
   }
 
-  // Remove an employee with the given id
+  // deletes an employee based from employee id entered in employee table
   removeEmployee(employeeId) {
     return this.connection
       .promise()
       .query("DELETE FROM employee WHERE id = ?", employeeId);
   }
-
 }
 
+//exports DB passing connecion parameter to be used in index.js file
 module.exports = new DB(connection);

@@ -1,62 +1,64 @@
+//imports inquirer package and queries.js from db folder
 const { prompt } = require("inquirer");
 const db = require("./db/queries");
 
 init();
 
-// Display logo text, load main prompts
+//init function to display main menu
 function init() {
-  loadMainPrompts();
+  loadMainMenu();
 }
 
-function loadMainPrompts() {
+//prompts main menu fuction, displays menu for users to choose from
+function loadMainMenu() {
   prompt([
     {
       type: "list",
-      name: "choice",
-      message: "What would you like to do?",
+      name: "menu",
+      message: "MENU: ",
       choices: [
         {
-          name: "View All Departments",
+          name: "VIEW ALL DEPARTMENTS: ",
           value: "VIEW_DEPARTMENTS",
         },
         {
-          name: "View All Roles",
+          name: "VIEW ALL ROLES:",
           value: "VIEW_ROLES",
         },
         {
-          name: "View All Employees",
+          name: "VIEW ALL EMPLOYEES",
           value: "VIEW_EMPLOYEES",
         },
         {
-          name: "Add Department",
+          name: "ADD DEPARTMENT",
           value: "ADD_DEPARTMENT",
         },
         {
-          name: "Add Role",
+          name: "ADD ROLE",
           value: "ADD_ROLE",
         },
         {
-          name: "Add Employee",
+          name: "ADD EMPLOYEE",
           value: "ADD_EMPLOYEE",
         },
         {
-          name: "Update Employee Role",
+          name: "UPDATE EMPLOYEE ROLE",
           value: "UPDATE_EMPLOYEE_ROLE",
         },
         {
-          name: "Remove Employee",
+          name: "REMOVE EMPLOYEE",
           value: "REMOVE_EMPLOYEE",
         },
         {
-          name: "Quit",
+          name: "QUIT",
           value: "QUIT",
         },
       ],
     },
   ]).then((res) => {
-    let choice = res.choice;
-    // Call the appropriate function depending on what the user chose
-    switch (choice) {
+    let menu = res.menu;
+    // switch case to call out function based from the users selection from main menu
+    switch (menu) {
       case "VIEW_DEPARTMENTS":
         viewDepartments();
         break;
@@ -87,58 +89,56 @@ function loadMainPrompts() {
   });
 }
 
-
-// View all deparments
+// displays all content from the department table, invoking viewAllDepartments function from class DB in queries.js
 function viewDepartments() {
-  db.findAllDepartments()
+  db.viewAllDepartments()
     .then(([rows]) => {
       let departments = rows;
       console.log("\n");
       console.table(departments);
     })
-    .then(() => loadMainPrompts());
+    .then(() => loadMainMenu());
 }
 
-// View all roles
+// displays all roles with department id, invoking viewAllRoles function from class DB in queries.js
 function viewRoles() {
-  db.findAllRoles()
+  db.viewAllRoles()
     .then(([rows]) => {
       let roles = rows;
       console.log("\n");
       console.table(roles);
     })
-    .then(() => loadMainPrompts());
+    .then(() => loadMainMenu());
 }
-
-// View all employees
+// displays all employees reflecting roles, salaries dept and manager, invoking viewAllEmployees function from class DB in queries.js
 function viewEmployees() {
-  db.findAllEmployees()
+  db.viewAllEmployees()
     .then(([rows]) => {
       let employees = rows;
       console.log("\n");
       console.table(employees);
     })
-    .then(() => loadMainPrompts());
+    .then(() => loadMainMenu());
 }
 
-// Add a department
+// create a new line of department in department table, invoking addDepartment function from class DB in queries.js
 function addDepartment() {
   prompt([
     {
       name: "name",
-      message: "What is the name of the department?",
+      message: "DEPARTMENT NAME: ",
     },
   ]).then((res) => {
     let name = res;
-    db.createDepartment(name)
-      .then(() => console.log(`Added ${name.name} to the database`))
-      .then(() => loadMainPrompts());
+    db.addDepartment(name)
+      .then(() => console.log(`Successfully added : ${name.name} , in department table`))
+      .then(() => loadMainMenu());
   });
 }
 
-// Add a role
+// insert a new line of role in role table invoking addRole function inside queries.js db folder, uses viewAllDepartments to map department selection in prompt
 function addRole() {
-  db.findAllDepartments().then(([rows]) => {
+  db.viewAllDepartments().then(([rows]) => {
     let departments = rows;
     const departmentChoices = departments.map(({ id, name }) => ({
       name: name,
@@ -148,42 +148,42 @@ function addRole() {
     prompt([
       {
         name: "title",
-        message: "What is the name of the role?",
+        message: "NEW ROLE: ",
       },
       {
         name: "salary",
-        message: "What is the salary of the role?",
+        message: "SALARY: ",
       },
       {
         type: "list",
         name: "department_id",
-        message: "Which department does the role belong to?",
+        message: "ASSIGNED DEPARTMENT: ",
         choices: departmentChoices,
       },
     ]).then((role) => {
-      db.createRole(role)
-        .then(() => console.log(`Added ${role.title} to the database`))
-        .then(() => loadMainPrompts());
+      db.addRole(role)
+        .then(() => console.log(`New role:  ${role.title} , successfully added in the role table`))
+        .then(() => loadMainMenu());
     });
   });
 }
 
-// Add an employee
+ // Create a new line of exployee and adds it on the employeee table
 function addEmployee() {
   prompt([
     {
       name: "first_name",
-      message: "What is the employee's first name?",
+      message: "FIRST NAME: ",
     },
     {
       name: "last_name",
-      message: "What is the employee's last name?",
+      message: "LAST NAME: ",
     },
   ]).then((res) => {
     let firstName = res.first_name;
     let lastName = res.last_name;
 
-    db.findAllRoles().then(([rows]) => {
+    db.viewAllRoles().then(([rows]) => {
       let roles = rows;
       const roleChoices = roles.map(({ id, title }) => ({
         name: title,
@@ -193,12 +193,12 @@ function addEmployee() {
       prompt({
         type: "list",
         name: "roleId",
-        message: "What is the employee's role?",
+        message: "EMPLOYEE ROLE: ",
         choices: roleChoices,
       }).then((res) => {
         let roleId = res.roleId;
 
-        db.findAllEmployees().then(([rows]) => {
+        db.viewAllEmployees().then(([rows]) => {
           let employees = rows;
           const managerChoices = employees.map(
             ({ id, first_name, last_name }) => ({
@@ -212,7 +212,7 @@ function addEmployee() {
           prompt({
             type: "list",
             name: "managerId",
-            message: "Who is the employee's manager?",
+            message: "EMPLOYEE MANAGER: ",
             choices: managerChoices,
           })
             .then((res) => {
@@ -226,18 +226,18 @@ function addEmployee() {
               db.createEmployee(employee);
             })
             .then(() =>
-              console.log(`Added ${firstName} ${lastName} to the database`)
+              console.log(`New employee:  ${firstName} ${lastName} successfully added in the roster.`)
             )
-            .then(() => loadMainPrompts());
+            .then(() => loadMainMenu());
         });
       });
     });
   });
 }
 
-// Update an employee's role
+  // update an existing employees role, passing employee id and role id parameter to update in employee table
 function updateEmployeeRole() {
-  db.findAllEmployees().then(([rows]) => {
+  db.viewAllEmployees().then(([rows]) => {
     let employees = rows;
     const employeeChoices = employees.map(({ id, first_name, last_name }) => ({
       name: `${first_name} ${last_name}`,
@@ -248,12 +248,12 @@ function updateEmployeeRole() {
       {
         type: "list",
         name: "employeeId",
-        message: "Which employee's role do you want to update?",
+        message: "EMPLOYEE :",
         choices: employeeChoices,
       },
     ]).then((res) => {
       let employeeId = res.employeeId;
-      db.findAllRoles().then(([rows]) => {
+      db.viewAllRoles().then(([rows]) => {
         let roles = rows;
         const roleChoices = roles.map(({ id, title }) => ({
           name: title,
@@ -264,21 +264,21 @@ function updateEmployeeRole() {
           {
             type: "list",
             name: "roleId",
-            message: "Which role do you want to assign the selected employee?",
+            message: "NEW ROLE: ",
             choices: roleChoices,
           },
         ])
           .then((res) => db.updateEmployeeRole(employeeId, res.roleId))
-          .then(() => console.log("Updated employee's role"))
-          .then(() => loadMainPrompts());
+          .then(() => console.log("EMPLOYEE UPDATED IN ROSTER"))
+          .then(() => loadMainMenu());
       });
     });
   });
 }
 
-// Delete an employee
+  // deletes an employee based from employee id entered in employee table
 function removeEmployee() {
-  db.findAllEmployees().then(([rows]) => {
+  db.viewAllEmployees().then(([rows]) => {
     let employees = rows;
     const employeeChoices = employees.map(({ id, first_name, last_name }) => ({
       name: `${first_name} ${last_name}`,
@@ -289,18 +289,18 @@ function removeEmployee() {
       {
         type: "list",
         name: "employeeId",
-        message: "Which employee do you want to remove?",
+        message: "EMPLOYEE: ",
         choices: employeeChoices,
       },
     ])
       .then((res) => db.removeEmployee(res.employeeId))
-      .then(() => console.log("Removed employee from the database"))
-      .then(() => loadMainPrompts());
+      .then(() => console.log("EMPLOYEE REMOVED IN ROSTER"))
+      .then(() => loadMainMenu());
   });
 }
 
 // Exit the application
 function quit() {
-  console.log("Goodbye!");
+  console.log("Logging Off Application.");
   process.exit();
 }
