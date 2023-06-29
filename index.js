@@ -296,5 +296,8 @@ function removeEmployee() {
 }
 
 
-function exit() {}
+const exit = () => {
+  console.log ("Closing Application");
+  process.exit();
+};
 
