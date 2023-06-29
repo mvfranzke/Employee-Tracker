@@ -17,17 +17,12 @@ npm i inquirer @8.2.4
 ```
 
 ## Usage
-Given the command-line application that accepts user input, user will be prompted with a menu of option : view all departments, view all roles, view all employees, add a department, add a role, add an employee, and update an employee role
+Given the command-line application that accepts user input, user will be prompted with a menu of option : view all departments, view all roles, view all employees, add a department, add a role, add an employee, update an employee role, and delete employee.
 
-To run the test:
-
-```
-npm run test
-```
 
 URL of Github repository : https://github.com/mvfranzke/Employee-Tracker
 
-Video Link (user flow): 
+Video Link (user flow): https://drive.google.com/file/d/1Ic4NVafI-Glj-e88ukOySkuYNgkWi8WG/view
 
 ## Credits
 Other resources used:
