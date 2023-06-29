@@ -41,7 +41,7 @@ class DB {
       .query("INSERT INTO department SET ?", department);
   }
 
-  //addRole insert a new line of role in role table
+  //addRole insert a new line of role in role table, passing role parameter
   addRole(role) {
     return this.connection.promise().query("INSERT INTO role SET ?", role);
   }
