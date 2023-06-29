@@ -273,7 +273,27 @@ function updateEmployeeRole() {
 }
 
 
-function removeEmployee() {}
+function removeEmployee() {
+  db.viewAllEmployees()
+    .then(([rows]) => {
+      let employees = rows;
+      const employeeChoice = employees.map(({ id, first_name, last_name}) => ({
+        name: `${first_name} ${last_name}`, value: id
+      }));
+
+      prompt([
+        {
+          type: "list",
+          name: "employeeID",
+          message: "Select employee to remove: ",
+          choices: employeeChoice
+        }
+      ])
+          .then(res => db.removeEmployee(res.employeeID))
+          .then(() => console.log("Employee Successfully Removed"))
+          .then(() => loadMainMenu())
+    })
+}
 
 
 function exit() {}
