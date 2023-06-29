@@ -15,7 +15,7 @@ class DB {
       .query("SELECT department.id, department.name FROM department;");
   }
 
-  //viewAllRoles to display all role table content with department id
+  //viewAllRoles to display all roletable content with department_id
   viewAllRoles() {
     return this.connection
       .promise()
