@@ -34,7 +34,7 @@ class DB {
       );
   }
 
-  //addDepartment to create a new line of department in department table
+  //addDepartment, passing department parameter to create a new line of department in department table
   addDepartment(department) {
     return this.connection
       .promise()
