@@ -1,12 +1,16 @@
-//import mysql2
 const mysql = require("mysql2");
 
-//create connection in mysql workbench
 const connection = mysql.createConnection({
   host: "localhost",
-  user: "host",
+  // Your username
+  user: "root",
+  // Your password
   password: "password",
-  database: "employees_db"
+  database: "employees_db",
 });
 
+connection.connect(function (err) {
+  if (err) throw err;
+});
 
+module.exports = connection;
