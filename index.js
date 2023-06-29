@@ -127,13 +127,40 @@ function addDepartment() {
   .then (res => {
     let name = res;
     db.addNewDepartment(name)
-    .then(() => console.log(`New department name: ${name.name} successfully added.`))
+    .then(() => console.log(`New department name: ${name.name},  successfully added.`))
     .then(()=> loadMainMenu())
   })
 }
 
 
-function addRole() {}
+function addRole() {
+  db.viewAllDepartments()
+  .then(([rows]) => {
+    let departments = rows;
+    const departmentChoice = departments.map(({ id, name}) => ({ name: name, value: id}));
+    
+    prompt([
+      {
+        name: "title",
+        message: "Enter New Role Title: "
+      },
+      {
+        name: "salary",
+        message: "Enter Salary: "
+      },
+      {
+       type: "list",
+       name: "department_id",
+       message: "Select department: ",
+       choices: departmentChoice
+      }
+    ]).then(role => {
+      db.addRole(role)
+      .then(() => console.log(`New Role: ${role.title}, successfully added.`))
+      .then(() => loadMainMenu())
+    })
+  })
+}
 
 
 function addEmployee() {}
