@@ -53,7 +53,7 @@ class DB {
       .query("INSERT INTO employee SET ?", employee);
   }
 
-  // update an existing employees role, passing employee id and role id parameter to update in employee table
+  // updateEmployeeRole update an existing employees role, passing employee id and role id parameter to update in employee table
   updateEmployeeRole(employeeId, roleId) {
     return this.connection
       .promise()
