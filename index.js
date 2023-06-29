@@ -132,7 +132,7 @@ function addDepartment() {
   })
 }
 
-
+//add a new role in role table
 function addRole() {
   db.viewAllDepartments()
   .then(([rows]) => {
@@ -162,8 +162,74 @@ function addRole() {
   })
 }
 
+//add a new employee in employee table
+function addEmployee() {
+  prompt([
+    {
+      name: "first_name",
+      message: "First Name: ",
+    },
+    {
+      name: "last_name"
+      message: "Last Name:"
+    }
+  ])
+  .then (res => {
+    let firstName = res.first_name;
+    let lastName = res.last_name;
 
-function addEmployee() {}
+    db.viewAllRoles()
+      .then(([rows]) => {
+        let roles = rows;
+        const roleChoice = roles.map(({ id, title }) => ({
+          name: title, value: id
+        }));
+
+        prompt({
+          type: "list",
+          name: "roleID",
+          message: "Role Title: ",
+          choices: roleChoice
+        })
+          .then(res => {
+            let roleID = res.roleID;
+
+            db.viewAllEmployees()
+            .then(([rows]) => {
+              let employees = rows;
+              const managerChoice = employees.map(({ id, first_name, last_name }) => ({
+                name: `${first_name} ${last_name}`, value: id
+              }));
+              
+              managerChoice.unshift({name: "None", value: null});
+
+              prompt({
+                type: "list",
+                name: "managerID",
+                message: "Manager name:",
+                choices: managerChoice
+              })
+                .then(res => {
+                  let employee = {
+                    manager_id: res.managerID,
+                    roleID: roleID,
+                    first_name: firstName,
+                    last_name: lastName
+                  }
+
+                  db.createEmployee(employee);
+                })
+                  .then(() => console.log(
+                    `New Employee: ${firstName} ${lastName}, successfully added.`
+                  ))
+                  .then(()=>loadMainMenu)
+            })
+
+         })
+
+      })
+  })
+}
 
 
 function updateEmployeeRole() {}
