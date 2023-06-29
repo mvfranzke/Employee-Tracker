@@ -116,8 +116,21 @@ function viewEmployees() {
   .then(() => loadMainMenu());
 }
 
-
-function addDepartment() {}
+//adds new department in department table
+function addDepartment() {
+  prompt([
+    {
+      name: "name",
+      message: "Enter new department name: "
+    }
+  ])
+  .then (res => {
+    let name = res;
+    db.addNewDepartment(name)
+    .then(() => console.log(`New department name: ${name.name} successfully added.`))
+    .then(()=> loadMainMenu())
+  })
+}
 
 
 function addRole() {}
