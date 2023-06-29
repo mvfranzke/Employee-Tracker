@@ -63,7 +63,7 @@ class DB {
       ]);
   }
 
-  // deletes an employee based from employee id entered in employee table
+  // removeEmployee deletes an employee based from employee id entered in employee table
   removeEmployee(employeeId) {
     return this.connection
       .promise()
